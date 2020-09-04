@@ -61,3 +61,18 @@ class GameObject(sprite.Sprite):
                     self.rect.bottom = wall.top
                 if dy < 0: # Moving up; Hit the bottom side of the wall
                     self.rect.top = wall.bottom
+                    
+    def stop_move(self):
+        self.set_speed(0,0)
+
+    def right(self,speed : int):
+        self.set_speed(speed,0)
+
+    def left(self,speed : int):
+        self.set_speed(-speed,0)
+
+    def down(self,speed : int):
+        self.set_speed(0,speed)
+
+    def up(self,speed : int):
+        self.set_speed(0,-speed)
