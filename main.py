@@ -4,7 +4,7 @@ import configuration, color
 from game_object.player import Player
 from game_object.coin_model import CoinModel
 from game_object.coin import Coin
-
+from coin_model_factory import CoinModelFactory
 import random
 def main():
     pygame.init()
@@ -14,11 +14,21 @@ def main():
     
     player = Player((200,0,100))
     
-    coinModel = CoinModel((255,255,0),(10,10))
+    coin_model_factory = CoinModelFactory()
     coinList=[]
+    
     for i in range(50):
+        coinModel = None
         pos_x = random.randint(0,configuration.SCREEN_WIDTH)
         pos_y = random.randint(0,configuration.SCREEN_HEIGHT)
+        if i == 10:
+            coinModel = coin_model_factory.get_coin_model('red_coin_model')
+        elif i == 20:
+            coinModel = coin_model_factory.get_coin_model('blue_coin_model')
+        elif i == 30:
+            coinModel = coin_model_factory.get_coin_model('yellow_big_coin_model')
+        else:
+            coinModel = coin_model_factory.get_coin_model('yellow_coin_model')
         coin_aux = Coin(coinModel,(pos_x, pos_y),5)
         coinList.append(coin_aux)
     

@@ -1,5 +1,6 @@
 import pygame
 from pygame import sprite, image
+import configuration
 
 class GameObject(sprite.Sprite):
     def __init__(self,color):
@@ -35,14 +36,21 @@ class GameObject(sprite.Sprite):
     def update(self):
         self.rect.x += self._speed_x
         self.rect.y += self._speed_y
+        self.__out_screen()
     
     def __update_anim(self):
         #TODO: Hacer este caso de uso
         pass
     
     def __out_screen(self):
-        #TODO: Hacer este caso de uso
-        pass
+        if self.rect.x< - self.image.get_width():
+            self.rect.x = configuration.SCREEN_WIDTH
+        elif self.rect.x> configuration.SCREEN_WIDTH + self.image.get_width():
+            self.rect.x = -self.image.get_width()
+        elif self.rect.y< - self.image.get_height():
+            self.rect.y = configuration.SCREEN_HEIGHT
+        elif self.rect.y> configuration.SCREEN_HEIGHT+ self.image.get_height():
+            self.rect.y = -self.image.get_height()
     
     def _set_color(self, color):
         colorImage = pygame.Surface(self.image.get_size()).convert_alpha()
