@@ -5,6 +5,9 @@ from game_object.player import Player
 from game_object.coin_model import CoinModel
 from game_object.coin import Coin
 from coin_model_factory import CoinModelFactory
+import scene.game
+
+from scene.game import Game
 import random
 def main():
     pygame.init()
@@ -33,7 +36,13 @@ def main():
         coinList.append(coin_aux)
     
     all_sprite = sprite.Group()
+        
+    wall_list = []
+    wall_list.append(Wall(color.BLACK,pos=(100,200),tam=(20,300)))
+    
     all_sprite.add(player)
+    
+    
     while not done:
         clock.tick(60)
         for e in event.get():
@@ -41,21 +50,24 @@ def main():
                 done = True
             player.check_input(e)
         
-        # all_sprite.update(wal)
         
         
         screen.fill(color.WHITE)
-        player.update(walls=[])
+        player.update(wall_list)
            
         
-        
+        for e in wall_list:
+            e.draw(screen)
+            
         all_sprite.draw(screen)
+        
         for e in coinList:
             e.draw(screen)
+        
         index=0
         for e in coinList:
             if player.rect.colliderect(e.get_rect()):
-                print("Me choco {}".format(e.id))
+                print("Me choco una moneda {}".format(e.coin_model.color))
                 e.play_sound()
                 coinList.pop(index)
             index+=1
@@ -65,4 +77,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    scene.game.main()

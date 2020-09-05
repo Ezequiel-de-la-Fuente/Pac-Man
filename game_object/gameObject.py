@@ -57,18 +57,18 @@ class GameObject(sprite.Sprite):
         colorImage.fill(color)
         self.image.blit(colorImage, (0,0), special_flags = pygame.BLEND_RGBA_MULT)
         
-    def _cheack_walls(self,walls=[]):
+    def _cheack_walls(self,walls):
         for wall in walls:
-            if self.rect.colliderect(wall):
+            if self.rect.colliderect(wall.rect):
                 dx,dy = self.get_speed()
                 if dx > 0: # Moving right; Hit the left side of the wall
-                    self.rect.right = wall.left
+                    self.rect.right = wall.rect.left
                 if dx < 0: # Moving left; Hit the right side of the wall
-                    self.rect.left = wall.right
+                    self.rect.left = wall.rect.right
                 if dy > 0: # Moving down; Hit the top side of the wall
-                    self.rect.bottom = wall.top
+                    self.rect.bottom = wall.rect.top
                 if dy < 0: # Moving up; Hit the bottom side of the wall
-                    self.rect.top = wall.bottom
+                    self.rect.top = wall.rect.bottom
                     
     def stop_move(self):
         self.set_speed(0,0)

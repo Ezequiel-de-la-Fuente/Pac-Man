@@ -4,6 +4,7 @@ from game_object.coin_model import CoinModel
 from game_object.coin import Coin
 import color
 class CoinModelFactory():
+    #TODO: Cambiar la moneda amarilla grande por una blanca grande
     _NORMAL_SCALE = (10,10)
     _BIG_SCALE = (25,25)
     def __init__(self):
