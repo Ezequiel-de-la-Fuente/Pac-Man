@@ -1,7 +1,7 @@
 import pygame
 from pygame import sprite, image, transform, draw,mask
 import configuration        
-class Wall_two(sprite.Sprite):
+class Wall(sprite.Sprite):
     def __init__(self,image_path : str,pos = (0,0)):
         super().__init__()
         self.image = image.load(image_path).convert_alpha()

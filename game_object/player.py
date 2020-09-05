@@ -4,11 +4,13 @@ from audio_source import AudioSource
 from game_object.gameObject import GameObject
 class Player(GameObject):
     _NORMAL_SPEED = 4
-    def __init__(self,color):
+    def __init__(self,color, x = 300,y=300):
         super().__init__(color)
         self.image = image.load('data/sprite/player/sprite_0.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.inflate_ip(-5, -5)
+        # self.rect.inflate_ip(-5,-5)
+        self.rect.x = x
+        self.rect.y = y
         # self._set_color(color)
         self._special_atack = {"shoot_laser":False,"stop_time":False,"atack_on":False}
         self._score = 0
@@ -21,10 +23,10 @@ class Player(GameObject):
     def update(self,walls):
         super().update()
         self._cheack_walls(walls=walls)
-        if not self._speed_x==0 or not self._speed_y==0:
-            self.audioSource.play_audio_clip_each('beat',300)
-        else:
-            self.audioSource.stop_audio_clip('beat')
+        # if not self._speed_x==0 or not self._speed_y==0:
+        #     self.audioSource.play_audio_clip_each('beat',300)
+        # else:
+        #     self.audioSource.stop_audio_clip('beat')
     
     def check_input(self, event):
         if event.type == pygame.KEYDOWN:

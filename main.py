@@ -1,5 +1,5 @@
 import pygame
-from pygame import event, display, draw, sprite, time
+from pygame import event, display, draw, sprite, time   
 import configuration, color
 from game_object.player import Player
 from game_object.coin_model import CoinModel
@@ -10,6 +10,8 @@ import scene.game
 from scene.game import Game
 import random
 def main():
+    
+    
     pygame.init()
     done = False
     screen = display.set_mode(size=(configuration.SCREEN_WIDTH,configuration.SCREEN_HEIGHT))

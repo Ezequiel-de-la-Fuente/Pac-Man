@@ -9,14 +9,16 @@ class Coin():
         self.score = score
         self.coin_model = coin_model
         self.pos = pos
-        self.__rect = pygame.Rect(0,0,0,0)
+        self.rect = pygame.Rect(0,0,0,0)
+        self.radio = 1
         Coin._id+=1
         
     def draw(self, screen):
-        self.__rect = screen.blit(self.coin_model.image,self.pos)
+        self.rect = screen.blit(self.coin_model.image,self.pos)
+        
         
     def get_rect(self):
-        return self.__rect
+        return self.rect
     
     def play_sound(self):
         self.coin_model.audioSource.play_audio_clip('coin')
