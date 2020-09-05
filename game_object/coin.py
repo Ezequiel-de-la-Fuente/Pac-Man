@@ -9,7 +9,7 @@ class Coin():
         self.score = score
         self.coin_model = coin_model
         self.pos = pos
-        self.__rect : pygame.Rect
+        self.__rect = pygame.Rect(0,0,0,0)
         Coin._id+=1
         
     def draw(self, screen):

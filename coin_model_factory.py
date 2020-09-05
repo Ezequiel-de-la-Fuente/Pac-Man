@@ -5,19 +5,19 @@ from game_object.coin import Coin
 import color
 class CoinModelFactory():
     #TODO: Cambiar la moneda amarilla grande por una blanca grande
-    _NORMAL_SCALE = (10,10)
-    _BIG_SCALE = (25,25)
+    _NORMAL_SCALE = (15,15)
+    _BIG_SCALE = (20,20)
     def __init__(self):
         self.__red_coin_model = CoinModel(color.RED,CoinModelFactory._NORMAL_SCALE)
-        self.__yellow_coin_model = CoinModel(color.YELLOW,CoinModelFactory._NORMAL_SCALE)
+        self.__white_coin_model = CoinModel(color.WHITE,CoinModelFactory._NORMAL_SCALE)
         self.__yellow_big_coin_model = CoinModel(color.YELLOW,CoinModelFactory._BIG_SCALE)
         self.__blue_coin_model = CoinModel(color.BLUE,CoinModelFactory._NORMAL_SCALE)
         
     def get_coin_model(self, type : str):
         if type == 'red_coin_model':
             return self.__red_coin_model
-        elif type == 'yellow_coin_model':
-            return self.__yellow_coin_model
+        elif type == 'white_coin_model':
+            return self.__white_coin_model
         elif type == 'yellow_big_coin_model':
             return self.__yellow_big_coin_model
         elif type == 'blue_coin_model':

@@ -1,13 +1,15 @@
 import pygame
-from pygame import sprite, image, time
+from pygame import sprite, image, time,transform
 from audio_source import AudioSource
 from game_object.gameObject import GameObject
 class Player(GameObject):
     _NORMAL_SPEED = 4
     def __init__(self,color):
         super().__init__(color)
-        self.image = image.load('data/sprite/player/example.png').convert()
-        self._set_color(color)
+        self.image = image.load('data/sprite/player/sprite_0.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.inflate_ip(-5, -5)
+        # self._set_color(color)
         self._special_atack = {"shoot_laser":False,"stop_time":False,"atack_on":False}
         self._score = 0
         self._speed_boost = 5

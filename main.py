@@ -37,8 +37,8 @@ def main():
     
     all_sprite = sprite.Group()
         
-    wall_list = []
-    wall_list.append(Wall(color.BLACK,pos=(100,200),tam=(20,300)))
+    # wall_list = []
+    # wall_list.append(Wall(color.BLACK,pos=(100,200),tam=(20,300)))
     
     all_sprite.add(player)
     
@@ -53,11 +53,11 @@ def main():
         
         
         screen.fill(color.WHITE)
-        player.update(wall_list)
+        player.update([])
            
         
-        for e in wall_list:
-            e.draw(screen)
+        # for e in wall_list:
+        #     e.draw(screen)
             
         all_sprite.draw(screen)
         
@@ -77,5 +77,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
     scene.game.main()

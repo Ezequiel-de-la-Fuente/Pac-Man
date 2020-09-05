@@ -4,7 +4,7 @@ from audio_source import AudioSource
 class CoinModel(sprite.Sprite):
     def __init__(self,color : tuple,scale : tuple):
         super().__init__()
-        self.image = transform.scale(image.load('data/sprite/player/example.png').convert(),scale) 
+        self.image = image.load('data/sprite/coin_model.png').convert()
         self._set_color(color)
         self.color = color
         self.audioSource = AudioSource()
