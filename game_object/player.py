@@ -3,7 +3,6 @@ from pygame import sprite, image, time,transform
 from audio_source import AudioSource
 from game_object.gameObject import GameObject
 class Player(GameObject):
-    _NORMAL_SPEED = 4
     def __init__(self,color, x = 300,y=300):
         super().__init__(color)
         self.image = image.load('data/sprite/player/sprite_0.png').convert_alpha()
@@ -11,7 +10,8 @@ class Player(GameObject):
         # self.rect.inflate_ip(-5,-5)
         self.rect.x = x
         self.rect.y = y
-        # self._set_color(color)
+        self.__max_speed = 4
+        
         self._special_atack = {"shoot_laser":False,"stop_time":False,"atack_on":False}
         self._score = 0
         self._speed_boost = 5
@@ -31,21 +31,21 @@ class Player(GameObject):
     def check_input(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
-                self.up(Player._NORMAL_SPEED)
+                self.up(self.__max_speed)
             if event.key == pygame.K_s:
-                self.down(Player._NORMAL_SPEED)
+                self.down(self.__max_speed)
             if event.key == pygame.K_a:
-                self.left(Player._NORMAL_SPEED)
+                self.left(self.__max_speed)
             if event.key == pygame.K_d:
-                self.right(Player._NORMAL_SPEED)
+                self.right(self.__max_speed)
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_w and self.get_speed()[1] == -Player._NORMAL_SPEED:
+            if event.key == pygame.K_w and self.get_speed()[1] == -self.__max_speed:
                 self.stop_move()
-            if event.key == pygame.K_s and self.get_speed()[1] == Player._NORMAL_SPEED:
+            if event.key == pygame.K_s and self.get_speed()[1] == self.__max_speed:
                 self.stop_move()
-            if event.key == pygame.K_a and self.get_speed()[0] == -Player._NORMAL_SPEED:
+            if event.key == pygame.K_a and self.get_speed()[0] == -self.__max_speed:
                 self.stop_move()
-            if event.key == pygame.K_d and self.get_speed()[0] == Player._NORMAL_SPEED:
+            if event.key == pygame.K_d and self.get_speed()[0] == self.__max_speed:
                 self.stop_move()
 
     
