@@ -16,6 +16,7 @@ class GameObject(sprite.Sprite):
         self._is_alive = True
         
         self._animState = {"idle":True, "run_loop":False, "death":False}
+        
         self._images = []
         
     def get_speed(self):
@@ -32,6 +33,9 @@ class GameObject(sprite.Sprite):
     
     def get_images(self):
         return self._images
+    
+    def get_pos(self):
+        return (self.rect.x//25,self.rect.y//25)
     
     def update(self):
         self.rect.x += self._speed_x

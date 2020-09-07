@@ -26,10 +26,10 @@ class Game(Scene):
         
         self.__ghost_group = sprite.Group()
         
-        self.__ghost_group.add(Ghost(color.RED))
-        self.__ghost_group.add(Ghost(color.RED))
-        self.__ghost_group.add(Ghost(color.RED))
-        self.__ghost_group.add(Ghost(color.RED))
+        self.__ghost_group.add(Ghost(color.RED,level))
+        self.__ghost_group.add(Ghost(color.WHITE,level))
+        self.__ghost_group.add(Ghost(color.WHITE,level))
+        self.__ghost_group.add(Ghost(color.WHITE,level))
         
         self.__font_score = font.Font('data/dpcomic.ttf',50)
         self._state = {'continue':False, 'exit':False,'win':False}
@@ -46,7 +46,6 @@ class Game(Scene):
             self.__player.check_input(e)
             
         self.__ghost_group.update(self.__player,self.__wall_group)
-        
         self.__player.update(self.__wall_group)
         
         self.__check_colisions()
@@ -78,7 +77,7 @@ class Game(Scene):
         index=0
         for e in self.__coin_list:
             if self.__player.rect.colliderect(e.get_rect()):
-                print("Me choco una moneda {}".format(e.coin_model.color))
+                # print("Me choco una moneda {}".format(e.coin_model.color))
                 e.play_sound()
                 self.__coin_list.pop(index)
             index+=1
@@ -110,25 +109,25 @@ def main():
         "W               W              W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
-        "W                              W",
+        "W               W              W",
         "W WWWW W WWWWWWWWWWWWWW W WWWW W",
         "W      W                W      W",
         "WWW WW WWWWW WWWWWW WWWWW WW WWW",
         "WWW WW W     WWWWWW     W WW WWW",
         "WWW WW W WWWWWWWWWWWWWW W WW WWW",
         "W   WW W                W WW   WWWW",
-        "         WW W______W WW         ",
+        "         WW W______W WW            ",
         "W      W WW W______W WW W      WWWW",
         "WWW WW W WW W______W WW W WW WWW",
         "WWW WW W WW WWWWWWWW WW W WW WWW",
         "WWW WW W WW          WW W WW WWW",
         "WWW WW W WW WWWWWWWW WW W WW WWW",
-        "W                              W",
+        "W      W        W       W      W",
         "W WWWW W WWWWWWWWWWWWWW W WWWW W",
-        "W                              W",
+        "W               W              W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
-        "W        W            W        W",
+        "W        W      W     W        W",
         "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
     ]
     #24 filas
@@ -138,4 +137,5 @@ def main():
     while not myGame.get_state()['exit']:
         myGame.process()
         myGame.display_frame()
+
 

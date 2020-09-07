@@ -5,7 +5,6 @@ import configuration, color
 class Scene():
     def __init__(self):
         self.screen = display.set_mode(size=(configuration.SCREEN_WIDTH,configuration.SCREEN_HEIGHT))
-        self._audio_source = AudioSource()
         self._state = {'continue':False, 'exit':False}
         self._clock = time.Clock()
         self._fps = 30
