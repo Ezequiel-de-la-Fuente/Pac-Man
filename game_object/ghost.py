@@ -15,7 +15,8 @@ class Ghost(GameObject):
         super().__init__(color)
         self.image = image.load('data/sprite/ghost/red/red_ghost_0.png').convert_alpha()
         self.rect = self.image.get_rect()
-        
+        for i in range(4):
+            self._images.append(image.load('data\\sprite\\ghost\\red\\red_ghost_{}.png'.format(i)))
         self.rect.x = x
         self.rect.y = y
         self.__max_speed = 4
@@ -37,6 +38,14 @@ class Ghost(GameObject):
     def update(self,player : Player,walls):
         super().update()
         self._cheack_walls(walls,player)
+        if self._speed_x>0:
+            self.image = self._images[0]
+        elif self._speed_x<0:
+            self.image = self._images[2]
+        elif self._speed_y>0:
+            self.image = self._images[1]
+        elif self._speed_y<0:
+            self.image = self._images[3]
             
             
         if self.distance(player.rect.x, player.rect.y) < 200:

@@ -5,6 +5,7 @@ import configuration
 class GameObject(sprite.Sprite):
     def __init__(self,color):
         super().__init__()
+       
         self.image = image.load('data/sprite/player/example.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = 200
@@ -40,6 +41,7 @@ class GameObject(sprite.Sprite):
     def update(self):
         self.rect.x += self._speed_x
         self.rect.y += self._speed_y
+        
         self.__out_screen()
     
     def __update_anim(self):
