@@ -2,7 +2,7 @@ import pygame
 from pygame import sprite, image, transform
 from audio_source import AudioSource
 class CoinModel(sprite.Sprite):
-    def __init__(self,color : tuple,scale : tuple):
+    def __init__(self,color : tuple):
         super().__init__()
         self.image = image.load('data/sprite/coin_model.png').convert_alpha()
         self._set_color(color)

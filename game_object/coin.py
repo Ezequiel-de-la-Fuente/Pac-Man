@@ -10,7 +10,6 @@ class Coin():
         self.coin_model = coin_model
         self.pos = pos
         self.rect = pygame.Rect(0,0,0,0)
-        self.radio = 1
         Coin._id+=1
         
     def draw(self, screen):

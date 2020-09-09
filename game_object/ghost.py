@@ -11,12 +11,14 @@ from game_object.gameObject import GameObject
 from game_object.player import Player
 
 class Ghost(GameObject):
-    def __init__(self, color,level = "", x=370,y=320):
-        super().__init__(color)
-        self.image = image.load('data/sprite/ghost/red/red_ghost_0.png').convert_alpha()
+    def __init__(self, color : str,level = "", x=370,y=320):
+        super().__init__()
+        self.image = image.load('data/sprite/ghost/{}/{}_ghost_0.png'.format(color,color)).convert_alpha()
         self.rect = self.image.get_rect()
+        
         for i in range(4):
             self._images.append(image.load('data\\sprite\\ghost\\red\\red_ghost_{}.png'.format(i)))
+            
         self.rect.x = x
         self.rect.y = y
         self.__max_speed = 4
@@ -28,16 +30,107 @@ class Ghost(GameObject):
         
         self.find_time = 0
         self.restart_time = -1
+        self.delay_time = -1
         self.current_path = []
         self.aux = ()
-        
         self.find_path = False
-        self.delay_time = -1
+        self.dead_time = -1
         # self.audioSource.add_audio_clip('data/sound/Point.wav','beat',0.1)
     
     def update(self,player : Player,walls):
         super().update()
         self._cheack_walls(walls,player)
+        
+        self.update_anim()
+        
+        if self._is_alive:
+            self.select_path(player) 
+            if self.find_path:
+                self.start_path() 
+        else:
+            if self.dead_time==-1:
+                self.stop_move()
+                self.dead_time = time.get_ticks() + 6000
+            elif self.dead_time<time.get_ticks():
+                self._is_alive = True
+            
+
+    def start_path(self):
+        if len(self.current_path)==0:
+            self.restart_path_finding()
+        elif self.find_time < time.get_ticks():
+            self.restart_path_finding()
+        else:
+            self.advance_in_path()
+
+            if self.get_pos()==self.current_path[0] and self.delay_time<time.get_ticks():
+                self.next_node()
+
+    def next_node(self):
+        self.aux = self.current_path.pop(0)
+        speed_x, speed_y = self.get_speed()
+        if speed_y == 4:
+            self.delay_time=time.get_ticks() + 10
+        elif speed_y == -4:
+            self.delay_time=time.get_ticks() + 200
+
+        if speed_x == 4:
+            self.delay_time=time.get_ticks() + 40
+        elif speed_x == -4:
+            self.delay_time=time.get_ticks() + 200
+
+    def advance_in_path(self):
+        dx = self.get_pos()[0] - self.current_path[0][0]
+        dy = self.get_pos()[1] - self.current_path[0][1]
+        if self.delay_time>time.get_ticks():
+            dx = self.get_pos()[0] - self.aux[0]
+            dy = self.get_pos()[1] - self.aux[1]
+        if dx==1:
+            self.left(self.__max_speed)
+        elif dx==-1:
+            self.right(self.__max_speed)
+        elif dy==1:
+            self.up(self.__max_speed)
+        elif dy==-1:
+            self.down(self.__max_speed)
+
+    def restart_path_finding(self):
+        self.find_path = False
+        self.restart_time = time.get_ticks() + 4000
+        self.current_path.clear()
+
+    def select_path(self, player):
+        if self.distance(player.rect.x, player.rect.y) < 200:
+            if not self.find_path and self.restart_time<time.get_ticks():
+                # self.stop_move()
+                self.iteration = 0
+                self.iteration_time = 0
+                grid = pathfinding.core.grid.Grid(matrix=self.current_level)
+
+                x_ghost,y_ghost = self.get_pos()
+                x_player,y_player = player.get_pos()
+
+                start = grid.node(x_ghost, y_ghost)
+                try:
+                    end = grid.node(x_player, y_player)
+                except IndexError as Error:
+                    end = grid.node(1,1)
+
+
+                finder = pathfinding.finder.a_star.AStarFinder(
+                    diagonal_movement=pathfinding.core.diagonal_movement.DiagonalMovement.never)
+
+                path, runs = finder.find_path(start, end, grid)
+
+                # self.current_path = list(path)
+                for e in path:
+                    self.current_path.append(e)
+                self.current_path.pop(0)
+                # print(self.current_path)
+                self.find_path = True
+                self.find_time = time.get_ticks() + 2000
+
+    def update_anim(self):
         if self._speed_x>0:
             self.image = self._images[0]
         elif self._speed_x<0:
@@ -46,75 +139,6 @@ class Ghost(GameObject):
             self.image = self._images[1]
         elif self._speed_y<0:
             self.image = self._images[3]
-            
-            
-        if self.distance(player.rect.x, player.rect.y) < 200:
-            if not self.find_path and self.restart_time<time.get_ticks():
-                # self.stop_move()
-                self.iteration = 0
-                self.iteration_time = 0
-                grid = pathfinding.core.grid.Grid(matrix=self.current_level)
-                
-                x_ghost,y_ghost = self.get_pos()
-                x_player,y_player = player.get_pos()
-                
-                start = grid.node(x_ghost, y_ghost)
-                try:
-                    end = grid.node(x_player, y_player)
-                except IndexError as Error:
-                    end = grid.node(1,1)
-                
-                
-                finder = pathfinding.finder.a_star.AStarFinder(diagonal_movement=pathfinding.core.diagonal_movement.DiagonalMovement.never)
-                
-                path, runs = finder.find_path(start, end, grid)
-                
-                # self.current_path = list(path)
-                for e in path:
-                    self.current_path.append(e)
-                self.current_path.pop(0)
-                # print(self.current_path)
-                self.find_path = True
-                self.find_time = time.get_ticks() + 2000
-                
-        if self.find_path:
-            # print("Te busco")
-            if len(self.current_path)==0:
-                self.find_path = False
-                self.restart_time = time.get_ticks() + 10000
-                self.current_path.clear()
-            elif self.find_time < time.get_ticks():
-                self.find_path = False
-                self.current_path.clear()
-                self.restart_time = time.get_ticks() + 4000
-            else:
-                dx = self.get_pos()[0] - self.current_path[0][0]
-                dy = self.get_pos()[1] - self.current_path[0][1]
-                if self.delay_time>time.get_ticks():
-                    dx = self.get_pos()[0] - self.aux[0]
-                    dy = self.get_pos()[1] - self.aux[1]
-                if dx==1:
-                    self.left(self.__max_speed)
-                    
-                elif dx==-1:
-                    self.right(self.__max_speed)
-                elif dy==1:
-                    self.up(self.__max_speed)
-                elif dy==-1:
-                    self.down(self.__max_speed)
-                    
-                if self.get_pos()==self.current_path[0] and self.delay_time<time.get_ticks():
-                    self.aux = self.current_path.pop(0)
-                    speed_x, speed_y = self.get_speed()
-                    if speed_y == 4:
-                        self.delay_time=time.get_ticks() + 10
-                    elif speed_y == -4:
-                        self.delay_time=time.get_ticks() + 200
-                        
-                    if speed_x == 4:
-                        self.delay_time=time.get_ticks() + 40
-                    elif speed_x == -4:
-                        self.delay_time=time.get_ticks() + 200
                     
                     
             

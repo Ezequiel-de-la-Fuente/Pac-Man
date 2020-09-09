@@ -3,7 +3,7 @@ from pygame import sprite, image
 import configuration
 
 class GameObject(sprite.Sprite):
-    def __init__(self,color):
+    def __init__(self,color = None):
         super().__init__()
        
         self.image = image.load('data/sprite/player/example.png').convert_alpha()
@@ -26,8 +26,9 @@ class GameObject(sprite.Sprite):
     def set_speed(self, speed_x=0,speed_y=0):
         self._speed_x = speed_x
         self._speed_y = speed_y
+        
     def get_is_alive(self):
-        return self._isAlive
+        return self._is_alive
     
     def get_animState(self):
         return self._animState
@@ -44,7 +45,7 @@ class GameObject(sprite.Sprite):
         
         self.__out_screen()
     
-    def __update_anim(self):
+    def update_anim(self):
         #TODO: Hacer este caso de uso
         pass
     

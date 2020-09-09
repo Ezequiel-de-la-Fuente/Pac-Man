@@ -26,10 +26,10 @@ class Game(Scene):
         
         self.__ghost_group = sprite.Group()
         
-        self.__ghost_group.add(Ghost(color.RED,level))
-        self.__ghost_group.add(Ghost(color.WHITE,level))
-        self.__ghost_group.add(Ghost(color.WHITE,level))
-        self.__ghost_group.add(Ghost(color.WHITE,level))
+        self.__ghost_group.add(Ghost('red',level))
+        self.__ghost_group.add(Ghost('red',level))
+        self.__ghost_group.add(Ghost('red',level))
+        self.__ghost_group.add(Ghost('red',level))
         
         self.__font_score = font.Font('data/dpcomic.ttf',50)
         self._state = {'continue':False, 'exit':False,'win':False}
@@ -46,7 +46,7 @@ class Game(Scene):
             self.__player.check_input(e)
             
         self.__ghost_group.update(self.__player,self.__wall_group)
-        self.__player.update(self.__wall_group)
+        self.__player.update(self.__wall_group,self.__ghost_group)
         
         self.__check_colisions()
         
@@ -54,7 +54,10 @@ class Game(Scene):
             self._state['win'] = True
             self.__time = time.get_ticks() + 5000
         
-        if time.get_ticks()>self.__time and self._state['win']:
+        if not self.__player.get_is_alive() and self.__time == 0:
+            self.__time = time.get_ticks() + 5000
+            
+        if time.get_ticks()>self.__time and (self._state['win'] or not self.__player.get_is_alive()):
             self._state['exit'] = True
         
     def display_frame(self):
@@ -71,6 +74,9 @@ class Game(Scene):
         
         if self._state['win']:
             self._draw_text(self.__font_score,'WIN',365,300)
+        if not self.__player.get_is_alive():
+            self._draw_text(self.__font_score,'LOSE',365,300)
+            
         display.flip()
     
     def __check_colisions(self):
@@ -79,6 +85,7 @@ class Game(Scene):
             if self.__player.rect.colliderect(e.get_rect()):
                 # print("Me choco una moneda {}".format(e.coin_model.color))
                 e.play_sound()
+                self.__player.check_coin_type(e)
                 self.__coin_list.pop(index)
             index+=1
         
@@ -97,6 +104,10 @@ class Game(Scene):
                     self.__wall_group.add(Wall(self.wall_model,pos=(x,y)))
                 if col == "C" or col ==" ":
                     self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('white_coin_model'),pos=(x,y_coin),score=5))
+                if col == "B":
+                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('yellow_coin_model'),pos=(x,y_coin),score=10))
+                if col == "R":
+                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('red_coin_model'),pos=(x,y_coin),score=10))
                 x += 25
                 
             y += 25
@@ -116,18 +127,18 @@ def main():
         "WWW WW W     WWWWWW     W WW WWW",
         "WWW WW W WWWWWWWWWWWWWW W WW WWW",
         "W   WW W                W WW   WWWW",
-        "         WW W______W WW            ",
+        "         WW W______W WW          __",
         "W      W WW W______W WW W      WWWW",
         "WWW WW W WW W______W WW W WW WWW",
         "WWW WW W WW WWWWWWWW WW W WW WWW",
         "WWW WW W WW          WW W WW WWW",
         "WWW WW W WW WWWWWWWW WW W WW WWW",
-        "W      W        W       W      W",
+        "W      W       BWB      W      W",
         "W WWWW W WWWWWWWWWWWWWW W WWWW W",
-        "W               W              W",
+        "W      W                W      W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
-        "W        W      W     W        W",
+        "WB       WR          RW       BW",
         "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
     ]
     #24 filas
