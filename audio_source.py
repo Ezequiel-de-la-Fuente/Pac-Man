@@ -46,21 +46,23 @@ class AudioSource():
         return not self.__audio_clips.get(audio_name,None)==None
     
     @staticmethod
-    def play_music_loop(music_path : str):
+    def play_music_loop(music_path : str,volume = 1.0):
         try:
            mixer.music.load(music_path)
+           mixer.music.set_volume(volume)
            mixer.music.play(-1)
         except:
            print("[WARINIG] Not found.")
     
     @staticmethod
-    def play_music_each(music_path : str, loops : int):
+    def play_music_each(music_path : str, loops : int, volume = 1.0):
        try:
            mixer.music.load(music_path)
+           mixer.music.set_volume(volume)
            mixer.music.play(loops)
        except:
            print("[WARINIG] Not found.")
     
     @staticmethod
-    def stop_music(self):
+    def stop_music():
         mixer.music.stop()

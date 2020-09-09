@@ -36,6 +36,7 @@ class Ghost(GameObject):
         self.aux = ()
         self.find_path = False
         self.dead_time = -1
+        self.audioSource.add_audio_clip('data\\sound\\incoming-enemy.wav','incoming',0.5)
         # self.audioSource.add_audio_clip('data/sound/Point.wav','beat',0.1)
     
     def update(self,player : Player,walls):
@@ -48,7 +49,8 @@ class Ghost(GameObject):
             self._images = self.normal_ghost
             self.select_path(player) 
             if self.find_path:
-                self.start_path() 
+                self.start_path()
+                
         else:
             if self.dead_time==-1:
                 # self.stop_move()
@@ -133,6 +135,8 @@ class Ghost(GameObject):
                 # print(self.current_path)
                 self.find_path = True
                 self.find_time = time.get_ticks() + 2000
+                
+                # self.audioSource.play_audio_clip('incoming')
 
     def update_anim(self):
         if self._speed_x>0:

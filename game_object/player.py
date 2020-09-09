@@ -35,6 +35,7 @@ class Player(GameObject):
         
         self.audioSource = AudioSource()
         self.audioSource.add_audio_clip('data/sound/Point.wav','beat',0.1)
+        self.audioSource.add_audio_clip('data\\sound\\power_up.wav','power_up',0.3)
         self.__actual_time = 0
         self.__atack_time = -1
     
@@ -118,8 +119,12 @@ class Player(GameObject):
 
     
     def check_coin_type(self, coin):
+        sound = False
         if coin.coin_model.color == color.YELLOW:
             self._special_atack['atack_on'] = True
+            sound = True
+        if sound:
+            self.audioSource.play_audio_clip('power_up')
             #agregar un tiempo de ataque
     
     

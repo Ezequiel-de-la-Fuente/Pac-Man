@@ -8,6 +8,7 @@ class Scene():
         self._state = {'continue':False, 'exit':False}
         self._clock = time.Clock()
         self._fps = 30
+        self.audio_source = AudioSource()
         
     def process(self):
         pass
