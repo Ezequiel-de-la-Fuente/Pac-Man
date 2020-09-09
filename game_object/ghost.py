@@ -11,14 +11,15 @@ from game_object.gameObject import GameObject
 from game_object.player import Player
 
 class Ghost(GameObject):
-    def __init__(self, color : str,level = "", x=370,y=320):
+    def __init__(self, color : str,dead_ghost_model,level = "", x=370,y=320):
         super().__init__()
         self.image = image.load('data/sprite/ghost/{}/{}_ghost_0.png'.format(color,color)).convert_alpha()
         self.rect = self.image.get_rect()
         
         for i in range(4):
-            self._images.append(image.load('data\\sprite\\ghost\\red\\red_ghost_{}.png'.format(i)))
-            
+            self._images.append(image.load('data\\sprite\\ghost\\{}\\{}_ghost_{}.png'.format(color,color,i)))
+        self.dead_ghost_model = dead_ghost_model
+        self.normal_ghost = self._images
         self.rect.x = x
         self.rect.y = y
         self.__max_speed = 4
@@ -44,15 +45,18 @@ class Ghost(GameObject):
         self.update_anim()
         
         if self._is_alive:
+            self._images = self.normal_ghost
             self.select_path(player) 
             if self.find_path:
                 self.start_path() 
         else:
             if self.dead_time==-1:
-                self.stop_move()
+                # self.stop_move()
+                self._images = self.dead_ghost_model.images
                 self.dead_time = time.get_ticks() + 6000
             elif self.dead_time<time.get_ticks():
                 self._is_alive = True
+                self.dead_time = -1
             
 
     def start_path(self):

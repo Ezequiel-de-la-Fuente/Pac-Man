@@ -5,6 +5,7 @@ import configuration
 from audio_source import AudioSource
 from game_object.player import Player
 from game_object.ghost import Ghost
+from game_object.dead_ghost_model import DeadGhostModel
 from coin_model_factory import CoinModelFactory,Coin
 from game_object.wall import Wall
 from game_object.wall_model import WallModel
@@ -25,11 +26,11 @@ class Game(Scene):
         self.__group = sprite.Group(self.__player)
         
         self.__ghost_group = sprite.Group()
-        
-        self.__ghost_group.add(Ghost('red',level))
-        self.__ghost_group.add(Ghost('red',level))
-        self.__ghost_group.add(Ghost('red',level))
-        self.__ghost_group.add(Ghost('red',level))
+        self.ghost_dead_model = DeadGhostModel()
+        self.__ghost_group.add(Ghost('red',self.ghost_dead_model,level))
+        self.__ghost_group.add(Ghost('blue',self.ghost_dead_model,level))
+        self.__ghost_group.add(Ghost('green',self.ghost_dead_model,level))
+        self.__ghost_group.add(Ghost('lila',self.ghost_dead_model,level))
         
         self.__font_score = font.Font('data/dpcomic.ttf',50)
         self._state = {'continue':False, 'exit':False,'win':False}

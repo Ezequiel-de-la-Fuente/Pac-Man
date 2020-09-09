@@ -80,8 +80,8 @@ class Player(GameObject):
             if self.rect.colliderect(ghost.rect):
                 if self._special_atack['atack_on']:
                     ghost._is_alive = False
-                    ghost.rect.x = 370
-                    ghost.rect.y = 320
+                    # ghost.rect.x = 370
+                    # ghost.rect.y = 320
                 else:
                     self._is_alive = False
     
