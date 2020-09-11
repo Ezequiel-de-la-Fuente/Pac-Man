@@ -16,6 +16,11 @@ class Player(GameObject):
         self.images_left = [transform.flip(image_,True,False) for image_ in self._images]
         self.images_down = [transform.rotate(image_,-90)for image_ in self.images_right]
         self.images_up = [transform.rotate(image_,90)for image_ in self.images_right]
+        self.dead_image = []
+        for i in range(10):
+            self.dead_image.append(image.load('data\\sprite\\player\\dead\\dead_0{}.png'.format(i)).convert_alpha())
+        for i in range(10,13):
+            self.dead_image.append(image.load('data\\sprite\\player\\dead\\dead_{}.png'.format(i)).convert_alpha())
         self.time_animation = 0
         self.number_of_frames = 8
         self.rect = self.image.get_rect()
@@ -38,16 +43,26 @@ class Player(GameObject):
         self.audioSource.add_audio_clip('data\\sound\\power_up.wav','power_up',0.3)
         self.__actual_time = 0
         self.__atack_time = -1
+        self.anim_on = False
     
     def update(self,walls, ghosts):
         super().update()
         
         self._cheack_walls(walls=walls)
         self.__check_ghosts(ghosts)
-        self.__change_image()
+        
                 
         if not self._is_alive:
             self.stop_move()
+            self._images = self.dead_image
+            if self.time_animation<time.get_ticks():
+                self.time_animation = time.get_ticks() + 50
+                self.anim_on = True
+            elif self.anim_on:
+                self.anim_on = False
+                self.dead_animation()
+        else:
+            self.__change_image()
             
         if self._special_atack['atack_on']: 
             if self.__atack_time==-1:
@@ -56,7 +71,10 @@ class Player(GameObject):
                 self.__atack_time = -1
                 self._special_atack['atack_on']=False
         
-        
+    def dead_animation(self):
+        self.index+=1
+        if self.index<13:
+            self.image = self._images[self.index]
 
     def __change_image(self):
         if self.isFlip:

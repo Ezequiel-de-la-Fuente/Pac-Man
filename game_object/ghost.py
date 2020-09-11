@@ -64,7 +64,7 @@ class Ghost(GameObject):
         self.update_anim()
         draw = True
         if player._special_atack['atack_on'] and self._is_alive:
-            if player.get_time_atack() - 300 < time.get_ticks():
+            if player.get_time_atack() - 500 < time.get_ticks():
                 draw = (time.get_ticks() % 6) == 0
             if draw:
                 self.image = self.scared
