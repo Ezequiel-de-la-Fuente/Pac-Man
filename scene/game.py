@@ -67,9 +67,18 @@ class Game(Scene):
             self.audio_source.stop_music()
             self.audio_source.play_music_loop('data\\music\\scared_ghost.wav',0.5)
             self.play_normal_music = False
-        elif not self.__player._special_atack['atack_on'] and not self.play_normal_music:
+        elif not self.__player._special_atack['atack_on'] and not self.play_normal_music and not self.__player._special_atack['stop_time']:
             self.audio_source.stop_music()
             self.audio_source.play_music_loop('data\\music\\my_music.wav',0.5)
+            self.play_normal_music = True
+        
+        elif self.__player._special_atack['stop_time'] and self.play_normal_music:
+            self.audio_source.stop_music()
+            self.audio_source.play_music_loop('data\\music\\my_music_delay.wav',1)
+            self.play_normal_music = False
+        elif not self.__player._special_atack['stop_time'] and not self.play_normal_music and not self.__player._special_atack['atack_on']:
+            self.audio_source.stop_music()
+            self.audio_source.play_music_loop('data\\music\\my_music.wav',1)
             self.play_normal_music = True
             
             
@@ -117,10 +126,12 @@ class Game(Scene):
                     self.__wall_group.add(Wall(self.wall_model,pos=(x,y)))
                 if col == "C" or col ==" ":
                     self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('white_coin_model'),pos=(x,y_coin),score=5))
-                if col == "B":
+                if col == "Y":
                     self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('yellow_coin_model'),pos=(x,y_coin),score=10))
                 if col == "R":
                     self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('red_coin_model'),pos=(x,y_coin),score=10))
+                if col == "B":
+                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('blue_coin_model'),pos=(x,y_coin),score=10))
                 x += 25
                 
             y += 25
@@ -130,17 +141,17 @@ class Game(Scene):
 def main():
     level = [
         "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-        "W               W              W",
+        "W               W             YW",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
         "W               W              W",
         "W WWWW W WWWWWWWWWWWWWW W WWWW W",
-        "W      W                W      W",
+        "W      WB              BW      W",
         "WWW WW WWWWW WWWWWW WWWWW WW WWW",
         "WWW WW W     WWWWWW     W WW WWW",
         "WWW WW W WWWWWWWWWWWWWW W WW WWW",
         "W   WW W                W WW   WWWW",
-        "         WW W______W WW          __",
+        "_        WW W______W WW        ____",
         "W      W WW W______W WW W      WWWW",
         "WWW WW W WW W______W WW W WW WWW",
         "WWW WW W WW WWWWWWWW WW W WW WWW",
@@ -151,7 +162,7 @@ def main():
         "W      W                W      W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
         "W WW WWW WWWWWW W WWWWW WWW WW W",
-        "WB       WR          RW       BW",
+        "WY       WR          RW       YW",
         "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
     ]
     #24 filas

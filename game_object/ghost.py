@@ -17,14 +17,15 @@ class Ghost(GameObject):
         
         self.scared = image.load('data\\sprite\\ghost\\scared\\scared_ghost.png').convert_alpha()
         
-        self.rect = self.image.get_rect()
-        
         for i in range(4):
             self._images.append(image.load('data\\sprite\\ghost\\{}\\{}_ghost_{}.png'.format(color,color,i)))
+            
         self.dead_ghost_model = dead_ghost_model
         self.normal_ghost = self._images
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        
         self.__max_speed = 4
         self.set_speed(0,self.__max_speed)
         self.audioSource = AudioSource()
@@ -39,6 +40,7 @@ class Ghost(GameObject):
         self.aux = ()
         self.find_path = False
         self.dead_time = -1
+        
         self.audioSource.add_audio_clip('data\\sound\\incoming-enemy.wav','incoming',0.5)
         # self.audioSource.add_audio_clip('data/sound/Point.wav','beat',0.1)
     
@@ -61,16 +63,20 @@ class Ghost(GameObject):
                 self._is_alive = True
                 self.dead_time = -1
             self.atack = False
+            
         self.update_anim()
         draw = True
-        if player._special_atack['atack_on'] and self._is_alive:
-            if player.get_time_atack() - 500 < time.get_ticks():
-                draw = (time.get_ticks() % 6) == 0
-            if draw:
-                self.image = self.scared
-            else: 
-                self.image = pygame.Surface((0,0))
-        
+        if self._is_alive:
+            if player._special_atack['atack_on']:
+                if player.get_time_atack() - 500 < time.get_ticks():
+                    draw = (time.get_ticks() % 6) == 0
+                if draw:
+                    self.image = self.scared
+                else: 
+                    self.image = pygame.Surface((0,0))
+            
+                
+    
             
 
     def start_path(self):
@@ -236,4 +242,9 @@ class Ghost(GameObject):
             new_matrix.append(new_matrix_2)
             index+=1
         return new_matrix
+
+    def set_max_speed(self ,max_speed : int):
+        self.__max_speed = max_speed
+    def get_max_speed(self):
+        return self.__max_speed
     

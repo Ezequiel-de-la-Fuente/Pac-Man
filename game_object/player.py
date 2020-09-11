@@ -41,10 +41,12 @@ class Player(GameObject):
         self.audioSource = AudioSource()
         self.audioSource.add_audio_clip('data/sound/Point.wav','beat',0.1)
         self.audioSource.add_audio_clip('data\\sound\\power_up.wav','power_up',0.3)
+        self.audioSource.add_audio_clip('data\\sound\\death.wav','death',0.3)
         self.__actual_time = 0
         self.__atack_time = -1
+        self.__pause_time = 0
         self.anim_on = False
-    
+        self.play_death_sound = False
     def update(self,walls, ghosts):
         super().update()
         
@@ -54,6 +56,10 @@ class Player(GameObject):
                 
         if not self._is_alive:
             self.stop_move()
+            if not self.play_death_sound:
+                self.audioSource.stop_music()
+                self.audioSource.play_audio_clip('death')
+                self.play_death_sound = True
             self._images = self.dead_image
             if self.time_animation<time.get_ticks():
                 self.time_animation = time.get_ticks() + 50
@@ -70,6 +76,12 @@ class Player(GameObject):
             elif self.__atack_time<time.get_ticks():
                 self.__atack_time = -1
                 self._special_atack['atack_on']=False
+        if self._special_atack['stop_time']: 
+            if self.__atack_time==-1:
+                self.__atack_time = time.get_ticks() + 15000
+            elif self.__atack_time<time.get_ticks():
+                self.__atack_time = -1
+                self._special_atack['stop_time']=False
         
     def dead_animation(self):
         self.index+=1
@@ -103,6 +115,13 @@ class Player(GameObject):
                     # ghost.rect.y = 320
                 elif ghost.atack:
                     self._is_alive = False
+            elif self._special_atack['stop_time'] and ghost.get_max_speed() == 4:
+                ghost.set_max_speed(1)
+                ghost.stop_move()
+                ghost.up(1)
+            elif not self._special_atack['stop_time'] and ghost.get_max_speed() == 1:
+                ghost.set_max_speed(4)
+                ghost.up(4)
     
     def check_input(self, event):
         if self.get_is_alive():
@@ -141,6 +160,9 @@ class Player(GameObject):
         if coin.coin_model.color == color.YELLOW:
             self._special_atack['atack_on'] = True
             sound = True
+        if coin.coin_model.color == color.BLUE:
+            self._special_atack['stop_time'] = True
+            sound = True
         if sound:
             self.audioSource.play_audio_clip('power_up')
             #agregar un tiempo de ataque
@@ -150,9 +172,9 @@ class Player(GameObject):
         #TODO: Hacer este caso de uso
         pass
     
-    def __pause_time(self):
-        #TODO: Hacer este caso de uso
-        pass
+    # def __pause_time(self):
+    #     #TODO: Hacer este caso de uso
+    #     pass
     
     def __atack_on(self):
         #TODO: Hacer este caso de uso
