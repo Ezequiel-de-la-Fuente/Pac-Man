@@ -8,7 +8,7 @@ class CoinModel(sprite.Sprite):
         self._set_color(color)
         self.color = color
         self.audioSource = AudioSource()
-        self.audioSource.add_audio_clip('data/sound/coin.wav','coin',0.01)
+        self.audioSource.add_audio_clip('data/sound/coin.wav','coin',0.3)
     
     def _set_color(self, color : tuple):
         colorImage = pygame.Surface(self.image.get_size()).convert_alpha()

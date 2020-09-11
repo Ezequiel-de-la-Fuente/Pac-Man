@@ -37,7 +37,7 @@ class Game(Scene):
         
         self.__iteration = 1
         self.__time = 0
-        self.audio_source.play_music_loop('data\\music\\back_ground_music.wav',0.5)
+        self.audio_source.play_music_loop('data\\music\\my_music.wav',0.1)
         self.play_normal_music = True
         
     def process(self):
@@ -64,12 +64,12 @@ class Game(Scene):
             self._state['exit'] = True
             
         if self.__player._special_atack['atack_on'] and self.play_normal_music:
-            self.audio_source.stop_music()
-            self.audio_source.play_music_loop('data\\music\\back_ground_music_up.wav',0.5)
+            # self.audio_source.stop_music()
+            # self.audio_source.play_music_loop('data\\music\\my_music.wav',0.5)
             self.play_normal_music = False
         elif not self.__player._special_atack['atack_on'] and not self.play_normal_music:
-            self.audio_source.stop_music()
-            self.audio_source.play_music_loop('data\\music\\back_ground_music.wav',0.5)
+            # self.audio_source.stop_music()
+            # self.audio_source.play_music_loop('data\\music\\my_music.wav',0.5)
             self.play_normal_music = True
             
             

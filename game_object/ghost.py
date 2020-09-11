@@ -14,6 +14,9 @@ class Ghost(GameObject):
     def __init__(self, color : str,dead_ghost_model,level = "", x=370,y=320):
         super().__init__()
         self.image = image.load('data/sprite/ghost/{}/{}_ghost_0.png'.format(color,color)).convert_alpha()
+        
+        self.scared = image.load('data\\sprite\\ghost\\scared\\scared_ghost.png').convert_alpha()
+        
         self.rect = self.image.get_rect()
         
         for i in range(4):
@@ -25,7 +28,7 @@ class Ghost(GameObject):
         self.__max_speed = 4
         self.set_speed(0,self.__max_speed)
         self.audioSource = AudioSource()
-        
+        self.atack = True
         self.current_level = Ghost._matrix_str_to_matrix_int(level)
         self.initial_level_form = self.current_level.copy()
         
@@ -43,14 +46,12 @@ class Ghost(GameObject):
         super().update()
         self._cheack_walls(walls,player)
         
-        self.update_anim()
-        
         if self._is_alive:
             self._images = self.normal_ghost
             self.select_path(player) 
             if self.find_path:
                 self.start_path()
-                
+            self.atack = True
         else:
             if self.dead_time==-1:
                 # self.stop_move()
@@ -59,6 +60,17 @@ class Ghost(GameObject):
             elif self.dead_time<time.get_ticks():
                 self._is_alive = True
                 self.dead_time = -1
+            self.atack = False
+        self.update_anim()
+        draw = True
+        if player._special_atack['atack_on'] and self._is_alive:
+            if player.get_time_atack() - 300 < time.get_ticks():
+                draw = (time.get_ticks() % 6) == 0
+            if draw:
+                self.image = self.scared
+            else: 
+                self.image = pygame.Surface((0,0))
+        
             
 
     def start_path(self):

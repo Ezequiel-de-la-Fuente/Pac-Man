@@ -83,33 +83,33 @@ class Player(GameObject):
                     ghost._is_alive = False
                     # ghost.rect.x = 370
                     # ghost.rect.y = 320
-                else:
+                elif ghost.atack:
                     self._is_alive = False
     
     def check_input(self, event):
         if self.get_is_alive():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_w or event.key == pygame.K_UP:
                     self.up(self.__max_speed)
                     self.__flip_and_rotate(False,False,True) 
-                if event.key == pygame.K_s:
+                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                     self.down(self.__max_speed)
                     self.__flip_and_rotate(False,True,False)
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                     self.left(self.__max_speed)
                     self.__flip_and_rotate(True,False,False)
-                if event.key == pygame.K_d:
+                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     self.right(self.__max_speed)
                     self.__flip_and_rotate(False,False,False)
                     
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_w and self.get_speed()[1] == -self.__max_speed:
+                if (event.key == pygame.K_w or event.key == pygame.K_UP) and self.get_speed()[1] == -self.__max_speed:
                     self.stop_move()
-                if event.key == pygame.K_s and self.get_speed()[1] == self.__max_speed:
+                if (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.get_speed()[1] == self.__max_speed:
                     self.stop_move()
-                if event.key == pygame.K_a and self.get_speed()[0] == -self.__max_speed:
+                if (event.key == pygame.K_a or event.key == pygame.K_LEFT) and self.get_speed()[0] == -self.__max_speed:
                     self.stop_move()
-                if event.key == pygame.K_d and self.get_speed()[0] == self.__max_speed:
+                if (event.key == pygame.K_d or event.key == pygame.K_RIGHT) and self.get_speed()[0] == self.__max_speed:
                     self.stop_move()
 
     def __flip_and_rotate(self, isFlip : bool, rotete_down : bool, rotate_up : bool):
@@ -139,5 +139,6 @@ class Player(GameObject):
     def __atack_on(self):
         #TODO: Hacer este caso de uso
         pass 
-    
+    def get_time_atack(self):
+        return self.__atack_time
     
