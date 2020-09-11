@@ -46,6 +46,10 @@ class Game(Scene):
         for e in event.get():
             if e.type == pygame.QUIT:
                 self._state['exit'] = True
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_SPACE:
+                    self._state['exit'] = True
+                    self._state['continue'] = True
             self.__player.check_input(e)
             
         self.__ghost_group.update(self.__player,self.__wall_group)
@@ -168,9 +172,12 @@ def main():
     #24 filas
     #32 columnas
     pygame.init()
-    myGame = Game(level)
-    while not myGame.get_state()['exit']:
-        myGame.process()
-        myGame.display_frame()
+    continue_ = True
+    while continue_:
+        myGame = Game(level)
+        while not myGame.get_state()['exit']:
+            myGame.process()
+            myGame.display_frame()
+        continue_ = myGame.get_state()['continue']
 
 
