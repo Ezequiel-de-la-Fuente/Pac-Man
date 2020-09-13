@@ -1,3 +1,4 @@
+import sys
 import pygame
 from pygame import display, font, sprite, time, event
 import color
@@ -45,11 +46,8 @@ class Game(Scene):
         
         for e in event.get():
             if e.type == pygame.QUIT:
-                self._state['exit'] = True
-            if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_SPACE:
-                    self._state['exit'] = True
-                    self._state['continue'] = True
+                pygame.quit()
+                sys.exit()
             self.__player.check_input(e)
             
         self.__ghost_group.update(self.__player,self.__wall_group)
@@ -129,18 +127,20 @@ class Game(Scene):
                 if col == "W":
                     self.__wall_group.add(Wall(self.wall_model,pos=(x,y)))
                 if col == "C" or col ==" ":
-                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('white_coin_model'),pos=(x,y_coin),score=5))
+                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('white_coin_model'),pos=(x,y_coin),score=50))
                 if col == "Y":
-                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('yellow_coin_model'),pos=(x,y_coin),score=10))
+                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('yellow_coin_model'),pos=(x,y_coin),score=200))
                 if col == "R":
-                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('red_coin_model'),pos=(x,y_coin),score=10))
+                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('red_coin_model'),pos=(x,y_coin),score=200))
                 if col == "B":
-                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('blue_coin_model'),pos=(x,y_coin),score=10))
+                    self.__coin_list.append(Coin(self._coin_model_factory.get_coin_model('blue_coin_model'),pos=(x,y_coin),score=200))
                 x += 25
                 
             y += 25
             y_coin += 25
             x = 0
+    def get_score(self):
+        return self.__player._score
 
 def main():
     level = [
@@ -179,5 +179,8 @@ def main():
             myGame.process()
             myGame.display_frame()
         continue_ = myGame.get_state()['continue']
+    
+    return myGame.get_score()
+
 
 

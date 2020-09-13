@@ -113,6 +113,7 @@ class Player(GameObject):
                     ghost._is_alive = False
                     # ghost.rect.x = 370
                     # ghost.rect.y = 320
+                    self._score+=500
                 elif ghost.atack:
                     self._is_alive = False
             elif self._special_atack['stop_time'] and ghost.get_max_speed() == 4:
@@ -160,12 +161,13 @@ class Player(GameObject):
         if coin.coin_model.color == color.YELLOW:
             self._special_atack['atack_on'] = True
             sound = True
-        if coin.coin_model.color == color.BLUE:
+        elif coin.coin_model.color == color.BLUE:
             self._special_atack['stop_time'] = True
             sound = True
         if sound:
             self.audioSource.play_audio_clip('power_up')
             #agregar un tiempo de ataque
+        self._score+=coin.score
     
     
     def __shoot_laser(self):
